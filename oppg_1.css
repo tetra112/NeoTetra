@@ -1,0 +1,20 @@
+html {
+    font-family: Georgia, 'Times New Roman', Times, serif;
+}
+.overskrift {
+    font-family:Arial, Helvetica, sans-serif;
+}
+main {
+
+}
+section {
+    display: grid;
+    width: 50vw;
+    height: 75vh;
+    background-color: aqua;
+    grid-template-columns: 20vw 20vw 20vw;
+    grid-template-rows: 15vh 30vh 55vh;
+}
+article {
+    display: flex;
+}
