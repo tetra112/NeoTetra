@@ -3,18 +3,33 @@ html {
 }
 .overskrift {
     font-family:Arial, Helvetica, sans-serif;
-}
-main {
-
+    font-size: 2rem;
+    font-weight: bold;
+    padding: 1rem;
 }
 section {
-    display: grid;
-    width: 50vw;
-    height: 75vh;
+    display: flex;
+    width: 40vw;
+    height: 10vh;
+}
+section .overskrift {
     background-color: aqua;
-    grid-template-columns: 20vw 20vw 20vw;
-    grid-template-rows: 15vh 30vh 55vh;
+    align-items: center;
+
 }
 article {
+}
+.top {
+}
+.tabell {
+    background-color: blueviolet;
+}
+table {
     display: flex;
+    width: 40vw;
+}
+.bilde {
+}
+th {
+    border: 1px solid black;
 }
