@@ -1,0 +1,18 @@
+<script>
+    const disneyF = async () => {
+        let data = await fetch ('https://api.disneyapi.dev/character?page=1&pageSize=7438')
+        let json = await data.json()
+        return json
+    }
+
+
+    const print=()=>{
+        disneyF().then(figur=>{
+            console.log(figur.data[0].videoGames.length)
+            for (i=0;i<figur.data[0].videoGames.length;i++){
+                console.log(figur.data[1].videoGames)
+            }
+        })
+    }
+    print()
+</script>

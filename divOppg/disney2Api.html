@@ -1,0 +1,124 @@
+<body>
+    <div>
+        <input type="text">
+        <button id="btn1">Søk</button>
+        <ul id="forslag"></ul>
+    </div>
+    <div>
+        <button id="btn2">Legg til i tabell</button>
+        <p id="resultat"></p>
+    </div>
+    <div>
+        <table></table>
+    </div>
+</body>
+
+<script>
+
+    let inputEl     = document.querySelector('input')
+    let btn1El      = document.querySelector('#btn1')
+    let forslagEl   = document.querySelector('#forslag')
+    let resultatEl  = document.querySelector('#resultat')
+    let btn2El      = document.querySelector('#btn2')
+    let tableEl     = document.querySelector('table')
+
+    const disneyF = async () => {
+        let data = await fetch ('https://api.disneyapi.dev/character?page=1&pageSize=7438')
+        let json = await data.json()
+        return json
+    }
+
+    const forslagF = async()=>{
+        disneyF().then(figur =>{
+            let ord = inputEl.value;
+            let errorTest = 0;
+            for (i=0;i<figur.data.length;i++){
+                let lokFigur = figur.data[i].name.toLowerCase();
+                if (lokFigur.includes(ord)){
+                    errorTest++;
+                    let muligFig = document.createElement('li')
+                        muligFig.innerHTML = `${lokFigur}`
+                        muligFig.addEventListener('click',printFigur)
+                        forslagEl.appendChild(muligFig)
+                }
+            }
+                if(errorTest==0){
+                    let errorMsg = document.createElement('p')
+                        errorMsg.innerHTML = `ingen resultater på sok: "${ord}"`
+                        forslagEl.appendChild(errorMsg)
+                }
+        })
+    }
+    printFigur=(elem)=>{
+        let target = elem.target.innerHTML;
+        disneyF().then(figur=>{
+            for (i=0;i<figur.data.length;i++){
+                let lokFigur = figur.data[i];
+                if(target==lokFigur.name.toLowerCase()){
+                    resultatEl.dataset.name = lokFigur.name.toLowerCase();
+                    resultatEl.innerHTML = `${lokFigur.name}<br>
+                    <img src='${lokFigur.imageUrl}' height='314' weight='226'><br>
+                    <a target='_blank' href='${lokFigur.sourceUrl}'>Mer info</a>`
+                }
+            }
+        })
+    }
+
+    leggTilTabell=()=>{
+        let lokOrd = resultatEl.attributes[1].nodeValue;
+        disneyF().then(figur=>{
+            for (i=0;i<figur.data.length;i++){
+                let lokFigur = figur.data[i];
+                if(lokOrd==lokFigur.name.toLowerCase()){
+
+                // navn
+                    let trNavnEl = document.createElement('tr')
+                    let tdNavnEl = document.createElement('td')
+                        tdNavnEl.innerHTML = 'navn:'
+                    let tdNavnFig = document.createElement('td')
+                        tdNavnFig.innerHTML = lokFigur.name;
+                        trNavnEl.appendChild(tdNavnEl)
+                        trNavnEl.appendChild(tdNavnFig)
+                        tableEl.appendChild(trNavnEl)
+                    
+                // bilde
+                    let trBildeEl = document.createElement('tr')
+                    let tdBildeEl = document.createElement('td')
+                        tdBildeEl.innerHTML = 'bilde:'
+                    let tdBildeFigEl = document.createElement('td')
+                        tdBildeFigEl.innerHTML= `<img src='${lokFigur.imageUrl}'
+                                                 height='40' weight='30'>`
+                    trBildeEl.appendChild(tdBildeEl)
+                    trBildeEl.appendChild(tdBildeFigEl)
+                    tableEl.appendChild(trBildeEl)
+    /* 
+                //film
+                let filmer = figur.data[1].films
+                    for (i=0;i<filmer.length;i++){
+                        let trFilmEl = document.createElement('tr')
+                        let tdFilmEl = document.createElement('td')
+                            tdFilmEl.innerHTML = 'film:'
+                        let tdFilmFigEl = document.createElement('td')
+                            tdFilmFigEl.innerHTML = filmer[i];
+                            trFilmEl.appendChild(tdFilmEl)
+                            trFilmEl.appendChild(tdFilmFigEl)
+                            tableEl.appendChild(trFilmEl)
+                    }
+                
+                    //let tdSpillEl   = document.createElement('td')
+                    //let tdLinkEl    = document.createElement('td') */
+                }
+            }    
+        })
+    }
+
+
+    btn1El.addEventListener('click',forslagF)
+    btn2El.addEventListener('click',leggTilTabell)
+</script>
+<style>
+    body {
+        display: grid;
+        grid-template-columns: repeat(3,1fr);
+    }
+</style>

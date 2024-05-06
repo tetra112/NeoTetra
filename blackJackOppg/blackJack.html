@@ -1,0 +1,14 @@
+<script>
+
+    deck = async () => {
+        let data = await fetch ('https://www.deckofcardsapi.com/api/deck/new/shuffle/?deck_count=1');
+        let json = await data.json()
+        return json
+    }
+    print = async() =>{
+        return deck().then(data =>{
+            console.log(data)
+        })
+    }
+    print()
+</script>

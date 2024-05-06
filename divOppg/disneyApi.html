@@ -1,0 +1,34 @@
+<div>
+    <input type="text">
+    <button id="btn1">Søk</button>
+    <p id="resultat"></p>
+</div>
+<script>
+
+    let inputEl     = document.querySelector('input')
+    let btn1El      = document.querySelector('#btn1')
+    let resultatEl  = document.querySelector('#resultat')
+
+    const disney = async () => {
+        let url = 'https://api.disneyapi.dev/character?page=1&pageSize=7438';
+        let data = await fetch (url)
+        let json = await data.json()
+        let figur = json
+
+        for (i=0;i<figur.data.length;i++){
+            let lokFigur = figur.data[i];
+                if (lokFigur.name==inputEl.value || lokFigur.name.toLowerCase()==inputEl.value){
+                    resultatEl.innerHTML = `${lokFigur.name}<br>
+                    <img src='${lokFigur.imageUrl}' height='314' weight='226'><br>
+                    <a target='_blank' href='${lokFigur.sourceUrl}'>Mer info</a>`
+                }
+        }
+    }
+
+    const print = async()=>{
+        disney().then(data=>{
+            
+            })
+    }
+    btn1El.addEventListener('click',disney)
+</script>
