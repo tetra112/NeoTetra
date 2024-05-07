@@ -1,0 +1,22 @@
+<html>
+    <button id="drawCardBtn">Draw a card</button>
+</html>
+<script>
+    let drawCardBtnEl = document.querySelector('#drawCardBtn')
+    const newDeck = async()=>{
+        let url = 'https://www.deckofcardsapi.com/api/deck/new/'
+        let data = await fetch(url)
+        let json = await data.json()
+        console.log(json)
+        return json
+    }
+
+    const print =()=>{
+        newDeck().then(deck=>{
+            console.log(deck)
+        })
+    }
+    print()
+
+    drawCardBtnEl.addEventListener('click',()=>console.log(deck))
+</script>
