@@ -1,0 +1,35 @@
+<script>
+    let deck = {
+        hjerte:[],
+        ruter:[],
+        klover:[],
+        spar:[]
+    }
+    let test=[];
+
+    genDeck=(n,arr)=>{
+        if (n>1){
+            arr.unshift(n)
+            return genDeck(n-1,arr)
+        }else{
+            arr.push('kn')
+            arr.push('q')
+            arr.push('k')
+            arr.unshift('s')
+        }
+    }
+
+    fillDeck=()=>{
+        genDeck(10,deck.hjerte)
+        genDeck(10,deck.ruter)
+        genDeck(10,deck.klover)
+        genDeck(10,deck.spar)
+        console.log(deck)
+    }
+    fillDeck()
+    
+    drawCard=()=>{
+        
+    }
+
+</script>
