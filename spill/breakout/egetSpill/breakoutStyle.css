@@ -1,0 +1,8 @@
+#gameBoard{
+    position: absolute;
+    border: 1px solid black;
+}
+.playerC{
+    background-color: blue;
+
+}
