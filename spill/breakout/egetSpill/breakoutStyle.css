@@ -4,5 +4,12 @@
 }
 .playerC{
     background-color: blue;
-
+}
+.targetS {
+    background-color: aqua;
+}
+.ballS {
+    border-radius: 50%;
+    background-color: red;
+    position: absolute;
 }
