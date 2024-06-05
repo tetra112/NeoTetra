@@ -6,7 +6,10 @@
     background-color: blue;
 }
 .targetS {
+    position: absolute;
     background-color: aqua;
+    width: 80px;
+    height: 20px;
 }
 .ballS {
     border-radius: 50%;

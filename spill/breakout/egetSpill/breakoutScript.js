@@ -1,6 +1,5 @@
 /* 
-    Neste ting som skal gjøres er å lage kollisjonskode mellom ball og target
-    se linje: 140
+    bug: ball treffer target
 */
 
 
@@ -8,6 +7,7 @@
     const gameBoardV = {
         width:800,
         height:400,
+        score:0
     }
     const playerV = {
         width:120,
@@ -33,7 +33,7 @@
         yVector: 2
     }
     let timer;
-    const tickRate = 30;
+    const tickRate = 20;
 // Board --------------------------------------------
     let gameBoardEl = document.querySelector('#gameBoard')
         gameBoardEl.style.width = `${gameBoardV.width}px`;
@@ -78,29 +78,28 @@
         }
     }
     const targetArr = [];
-    genTarget =(x,yPos)=>{
-        for (i=0;i<targetV.antall;i++){
-            let xPos = x+100*i;
-            let toppTargetEl = document.createElement('div')
-            toppTargetEl.style.position = 'absolute';
-            toppTargetEl.style.width    = `${targetV.width}px`;
-            toppTargetEl.style.height   = `${targetV.height}px`
-            toppTargetEl.style.left     = `${xPos}px`;
-            toppTargetEl.style.bottom   = `${yPos}px`;
-            toppTargetEl.classList = 'targetS';
-            gameBoardEl.appendChild(toppTargetEl)
-            
-            targetArr.push(
-                new TargetC(xPos,yPos)
-            )
+
+    genClass =()=>{
+        for (i=0;i<targetV.rekker;i++){
+            for (j=0;j<targetV.antall;j++){
+                let yPos = 370-(40*i)
+                let xPos = 10+(100*j)
+                targetArr.push(
+                    new TargetC(xPos,yPos)
+                )
+            }
         }
     }
-    printTarget = () => {
-        genTarget(10,370)
-        genTarget(10,330)
-        genTarget(10,290)
-        genTarget(10,250)
+    drawTarget=()=>{
+        for (i=0;i<targetArr.length;i++){
+            let targetEl = document.createElement('div')
+                targetEl.classList = 'targetS';
+                targetEl.style.left = `${targetArr[i].bottomLeft[0]}px`
+                targetEl.style.bottom = `${targetArr[i].bottomLeft[1]}px`
+                gameBoardEl.appendChild(targetEl)
+        }
     }
+
 // Ball ---------------------------------------------
     ballV.pos = ballV.startPos;
     let ballEl = document.createElement('div')
@@ -125,28 +124,71 @@
             (ballV.pos[0]+ballV.diameter)>gameBoardV.width){
                 ballV.xVector = ballV.xVector*-1;
             }
-        if  (ballV.pos[1]<0 || 
-            (ballV.pos[1]+ballV.diameter)>gameBoardV.height){
+        if  ((ballV.pos[1]+ballV.diameter)>gameBoardV.height){
                 ballV.yVector = ballV.yVector*-1;
         }
+        if (ballV.pos[1]<0){
+            clearInterval(timer)
+        }
         // player
-        if ((ballV.pos[0]+ballV.diameter)>playerV.pos[0] && 
-            ballV.pos[0]<(playerV.pos[0]+playerV.width) &&
-            ballV.pos[1]<(playerV.pos[1]+playerV.height)
-            ){
-                ballV.yVector = ballV.yVector*-1;
+        if (
+            ballV.pos[1]<(playerV.pos[1]+playerV.height) &&
+            (ballV.pos[0]+ballV.diameter)>playerV.pos[0] &&
+            ballV.pos[0]<(playerV.pos[0]+playerV.width)
+        ){
+                ballV.yVector = 2;
             }
         // target
+        const allTargets = document.querySelectorAll('.targetS')
+        for (i=0;i<targetArr.length;i++){
+            if (
+                (ballV.pos[0]+ballV.diameter)>targetArr[i].bottomLeft[0] &&
+                (ballV.pos[1]+ballV.diameter)>targetArr[i].bottomLeft[1] &&
+                ballV.pos[0]<targetArr[i].toppRight[0] &&
+                ballV.pos[1]<targetArr[i].toppRight[1]
+            ){
+                allTargets[i].classList.remove('targetS')
+                allTargets.splice(i,1)
+                gameBoardV.score +=1;
+                ballV.yVector = -2
+            }
+        }
         
+        
+
+
+
     }
 
 // Funksjoner ---------------------------------------
     genPlayer()
-    printTarget()
+    genClass()
     drawPlayer()
+    drawTarget()
     document.addEventListener('keydown',movePlayer)
     timer = setInterval(ballVector,tickRate)
+    console.log(targetArr)
 
-/*
-
-*/
+    /* genTarget =(x,yPos)=>{
+        for (i=0;i<targetV.antall;i++){
+            let xPos = x+100*i;
+            let toppTargetEl = document.createElement('div')
+            toppTargetEl.style.position = 'absolute';
+            toppTargetEl.style.width    = `${targetV.width}px`;
+            toppTargetEl.style.height   = `${targetV.height}px`
+            toppTargetEl.style.left     = `${xPos}px`;
+            toppTargetEl.style.bottom   = `${yPos}px`;
+            toppTargetEl.classList = 'targetS';
+            gameBoardEl.appendChild(toppTargetEl)
+            
+            targetArr.push(
+                new TargetC(xPos,yPos)
+            )
+        }
+    } 
+    printTarget = () => {
+        genTarget(10,370)
+        genTarget(10,330)
+        genTarget(10,290)
+        genTarget(10,250)
+    } */
